@@ -3,6 +3,14 @@ LinkedIn Learning:
     -   TS Syntax
     -   TS into existing application
 
+# Intro:
+TS is statically typed (JS – dynamically typed)
+    -	Statically typed meaning: Its type cannot be changed and its type is determined at the compiling time itself.
+    -	Dynamically typed: type of variable will only be determined at the time of runtime and not during the compiling time. 
+        -- **NOTE:** compile time (program code to machine code) and runtime (is when the code is actually running on the computers hardware)
+TS is easily understandable by the peers.
+
+
 # To run the typescript:
 run "tsc -watch" or "tsc -w" in the terminal. 
 
