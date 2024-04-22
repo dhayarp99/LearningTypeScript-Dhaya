@@ -1,4 +1,16 @@
+interface Category {
+    name: string,
+    displayName: string,
+    subCategories: { name: string, displayName: string }[]
+}
+
 class InventoryStore {
+ private _categories: Category[] = [];
+ private _items: InventoryItem[] = [];
+ private _isInitialized: Promise<boolean>;
+
+
+
   /** the inventory categories */
   get categories() {
     return this._categories;
@@ -15,10 +27,6 @@ class InventoryStore {
   }
 
   constructor() {
-    // define and initialize properties (which happen to be "private")
-    this._categories = [];
-    this._items = [];
-
     // load initial set of data
     this._isInitialized = this._load();
   }
@@ -29,7 +37,7 @@ class InventoryStore {
    * @param {string} trackingNumber the item's tracking number
    * @returns the inventory item with the given tracking number, or null
    */
-  getItem(trackingNumber) {
+  getItem(trackingNumber: string): InventoryItem {
     return this._items.find(x => x.trackingNumber === trackingNumber);
   }
 
@@ -39,7 +47,7 @@ class InventoryStore {
    * @param {InventoryItem} item the item to add to inventory
    * @returns {Promise<InventoryItem>} promise containing the updated item after it's been saved
    */
-  addItem(item) {
+  addItem(item : InventoryItem): Promise<InventoryItem> {
     const errors = this.validateItem(item);
 
     if (errors.length) {
@@ -50,7 +58,7 @@ class InventoryStore {
       .toString(36)
       .substr(2, 9);
 
-    item.trackingNumber = trackingNumber;
+    // item.trackingNumber = trackingNumber;
 
     this._items.push(item);
 
@@ -151,7 +159,7 @@ class InventoryStore {
    *
    * @private  <-- just information, doesn't actually do anything at runtime
    */
-  _load() {
+  protected _load() {
     return Promise.all([
       getFromStorage("Categories"),
       getFromStorage("Inventory")
@@ -168,15 +176,16 @@ class InventoryStore {
    *
    * @private  <-- just information, doesn't actually do anything at runtime
    */
-  _save() {
+  protected _save() {
     return saveToStorage("Inventory", this._items);
   }
 
   //#endregion
-}
 
-// Create a "static" singleton instance for the entire application to use
-InventoryStore.instance = new InventoryStore();
+  // Create a "static" singleton instance for the entire application to use
+  static instance = new InventoryStore();
+}
 
 // Expose the singleton as the default export
 export default InventoryStore.instance;
+InventoryStore._save({} as any);
